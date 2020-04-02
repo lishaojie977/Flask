@@ -28,15 +28,18 @@ class Movie(db.Model):
     title = db.Column(db.String(60))
     year = db.Column(db.String(4))
 
+
+#m模板上下文处理函数
+@app.context_processor
+def common_user():
+    user = User.query.first()
+    return dict(user=user)
+
 #views
 @app.route('/')
 def index():
-    name = 'Bruce'
-    movies = [
-        {"title":"大赢家","year":"2020"},
-        {"title":"速度与激情","year":"201"}
-    ]
-    return render_template('index.html',name=name,movies=movies)
+    movies = Movie.query.all()
+    return render_template('index.html',movies=movies)
 
 
 
@@ -48,5 +51,31 @@ def initdb(drop):
         db.drop_all()
     db.create_all()
     click.echo("初始化数据库完成")
+
+
+# 向data.db中写入数据的命令
+@app.cli.command()
+def forge():
+    name = 'L'
+    moviews = [
+        {"title":"大赢家","year":"2020"},
+        {"title":"速度与激情","year":"2020"},
+    ]
+    user = User(name=name)
+    db.session.add(user)
+    for m in moviews:
+        movie = Movie(title=m['title'],year=m['year'])
+        db.session.add(movie)
+    db.session.commit()
+    click.echo('插入数据完成')
+
+#错误处理函数
+@app.errorhandler(404)
+def page_not_found(e):
+    #返回模板和状态码
+    return render_template('404.html'),404
+
+
+
 
 
