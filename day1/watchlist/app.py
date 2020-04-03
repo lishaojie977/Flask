@@ -79,6 +79,19 @@ def edit(movie_id):
     return render_template('edit.html',movie=movie)
 
 
+@app.route('/movie/delete/<int:movie_id>',methods=['GET','POST'])
+def delete(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    if request.method == 'POST':
+
+        db.session.delete(movie)
+        db.session.commit()
+        flash('删除完成')
+        return redirect(url_for('index'))
+
+    return render_template('delete.html',movie=movie)
+
+
 #自定义命令
 #新建data.db的数据库初始化功能
 @app.cli.command()  #装饰器，注册命令
