@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>删除页面</h3>
+{# 更新电影表单 #}
+<form method="post">
+    电影名称 <input type="text" name="title" autocomplete="off" required value="{{ movie.title }}" readonly="readonly">
+    电影年份 <input type="text" name="year" autocomplete="off" required value="{{ movie.year }}" readonly="readonly">
+    <input type="submit" class="btn" name="submit" value="删除">
+</form>
+
+{% endblock %}
