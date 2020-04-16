@@ -16,126 +16,73 @@
             </div>
             <div class="index-left-block lastest-news">
                 <h2>最新消息</h2>
-                <template v-for="text in Textcontent">
+                <template v-for="news in newsList">
                 <ul>
                     <li>
-                        <a v-bind:href="text.url">{{ text.title }}</a>
+                        <a v-bind:href="news.url">{{ news.title }}</a>
                     </li>
                 </ul>
                 </template>
             </div>
         </div>
         <div class="index-right">
-            <div style="font-size:40px;text-align:center;line-height:300px;width:900px;height:300px;background:pink;margin:0 auto;">LL</div>
+            <slider-component></slider-component>
             <div class="index-board-list">
-                <div class="index-board-item">
+                <div class="index-board-item" v-for="board in boardList">
                     <div class="index-board-item-inner">
-                        <h2>联想电脑</h2>
-                        <p>联想电脑真垃圾</p>
+                        <h2>{{ board.title }}</h2>
+                        <p>{{ board.description }}</p>
                         <div class="index-board-button">立即购买</div>
                     </div>
                 </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        <h2>联想电脑</h2>
-                        <p>联想电脑真垃圾</p>
-                        <div class="index-board-button">立即购买</div>
-                    </div>
-                </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        <h2>联想电脑</h2>
-                        <p>联想电脑真垃圾</p>
-                        <div class="index-board-button">立即购买</div>
-                    </div>
-                </div>
-                <div class="index-board-item">
-                    <div class="index-board-item-inner">
-                        <h2>联想电脑</h2>
-                        <p>联想电脑真垃圾</p>
-                        <div class="index-board-button">立即购买</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import SliderComponent from './sliderComponent'
+
 export default {
+    components:{
+        SliderComponent
+    },
+    mounted() {
+        axios.get('api/getNewsList/')
+        .then((response) => {
+            console.log(response);
+            this.newsList = response.data.list
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+        axios.get('api/getProductList/')
+        .then((response) => {
+            console.log(response);
+            this.productList = response.data
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+        axios.get('api/getBoardList/')
+        .then((response) => {
+            console.log(response);
+            this.boardList = response.data
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    },
     data() {
         return {
-            productList: {
-                pc: {
-                    title: "PC产品",
-                    list: [
-                            {
-                                title: "数据统计",
-                                url: "http://starcraft.com"
-                            },
-                            {
-                                title: "数据预测",
-                                url: "http://warcraft.com"
-                            },
-                            {
-                                title: "流量分析",
-                                url: "http://overwatch.com",
-                                hot: true
-                            },
-                            {
-                                title: "广告发布",
-                                url: "http://hearstone.com"
-                            }
-                        ]
-                    },
-                app: {
-                    title: "手机应用类",
-                    last:true,
-                    list: [
-                            {
-                                title: "91助手",
-                                url: "http://weixin.com"
-                            },
-                            {
-                                title: "产品助手",
-                                url: "http://weixin.com",
-                                hot:true
-                            },
-                            {
-                                title: "智能地图",
-                                url: "http://maps.com"
-                            },
-                            {
-                                title: "语音助手",
-                                url: "http://phone.com",
-                                hot:true
-                            }
-                        ]
-                    }
-                },
-                Textcontent:[
-                    {
-                        title:"习近平强调的这个'安全'当下意义更加凸显",
-                        url:"https://news.sina.com.cn/gov/xlxw/2020-04-15/doc-iircuyvh7959066.shtml"
-                    },
-                    {
-                        title:"终于 特朗普走出了这一步",
-                        url:"https://news.sina.com.cn/w/2020-04-15/doc-iircuyvh7852499.shtml"
-                    },
-                    {
-                        title:"蓬佩奥又拿疫情说事，外交部：欲盖弥彰无助缓解美国国内疫情",
-                        url:"https://news.sina.com.cn/c/2020-04-15/doc-iircuyvh7940243.shtml"
-                    },
-                    {
-                        title:"英国主持人连线大臣时怒了：4000老人死在养老院，你笑什么？",
-                        url:"https://news.sina.com.cn/w/2020-04-15/doc-iirczymi6519824.shtml"
-                    }
-                ]
-            }
-
-        }
-
+            newsList:[],
+            productList: null,
+            boardList:null
+        };
     }
+}
 </script>
 
 <style scoped>
@@ -189,6 +136,7 @@ export default {
         box-shadow: 0 0 1px #ddd;
         margin-bottom: 20px;
         padding-top: 20px;
+        margin-top: 15px;
     }
     .index-board-item-inner{
         height: 125px;
