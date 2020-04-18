@@ -51,7 +51,7 @@ export default {
         },
         passwordErrors(){
             let errorText,status;
-            if (!/^\w(1,6)$/g.test(this.passwordModel)) {
+            if (/^(\w){6,10}$/g.test(this.passwordModel)) {
                 status = false
                 errorText = '密码不是1-6位'
             }else{
